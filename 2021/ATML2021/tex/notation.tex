@@ -1,0 +1,157 @@
+\usepackage{mathrsfs}
+\usepackage{amsfonts}
+\usepackage{xfrac}
+%\usepackage{mathbbol}
+%\usepackage{dsfont}
+%\usepackage{bbm}
+
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+
+
+
+
+\newsavebox{\fminipagebox}
+\NewDocumentEnvironment{fminipage}{m O{\fboxsep}}
+{\par\kern#2\noindent\begin{lrbox}{\fminipagebox}
+		\begin{minipage}{#1}\ignorespaces}
+		{\end{minipage}\end{lrbox}%
+	\makebox[#1]{%
+		\kern\dimexpr-\fboxsep-\fboxrule\relax
+		\fbox{\usebox{\fminipagebox}}%
+		\kern\dimexpr-\fboxsep-\fboxrule\relax
+	}\par\kern#2
+}
+
+
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Rd}{\R^{d}}
+\newcommand{\Rn}{\R^{n}}
+\newcommand{\Rm}{\R^{m}}
+\newcommand{\RN}{\R^{N}}
+\newcommand{\Rnn}{\R^{n\times n}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\X}{\mathbb{X}}
+\newcommand{\sigmatwo}{\sigma^{2}}
+\newcommand{\phalf}{\frac{p}{2}}
+\newcommand{\half}{\frac{1}{2}}
+\newcommand{\inverse}{^{-1}}
+\newcommand{\symmetricPart}{\text{sym}}
+\newcommand{\antisymmetricPart}{\text{antisym}}
+\newcommand{\abs}[1]{\left\lvert {#1} \right\rvert}
+
+\newcommand{\id}[1][ ]{\mathtt{id}_{#1}}
+
+\newcommand{\transpose}{^{\mathsf{T}}}
+\newcommand{\squared}{^{2}}
+
+\newcommand{\subscriptij}{_{i,j}}
+
+\newcommand{\st}{\text{ s.t. }}
+\newcommand{\argmin}{\mathrm{argmin}}
+
+\newcommand{\timeHorizon}{T}
+  \newcommand{\infinity}{\infty}
+
+
+%notation for derivatives
+\newcommand{\derivative}{^{\prime}}
+\newcommand{\Fprime}{F\derivative}
+\newcommand{\partialij}{\partial^{2}_{i,j}}
+\newcommand{\gradx}{\nabla_{x}}
+\newcommand{\gradz}{\nabla_{z}}
+\newcommand{\Hessianx}{\nabla^{2}_{xx}}
+\newcommand{\Hessianz}{\nabla^{2}_{zz}}
+
+
+
+
+\newcommand{\restrictedto}[1]{\arrowvert_{#1}}
+
+%norms
+\newcommand{\norm}[1][\cdot]{\left\lVert {#1}\right\rVert}
+\newcommand{\supNorm}[1][\cdot]{\lVert #1 \rVert_{\infty}}
+\newcommand{\HoelNorm}[2][\cdot]{\lVert {#1} \rVert_{{#2}\text{-H\"ol}}}
+\newcommand{\pvarNorm}[2][\cdot]{\lVert {#1} \rVert_{{#2}\text{-var}}}
+\newcommand{\pvarNormInterval}[3][\cdot]{\lVert {#1} \rVert_{{#2}\text{-var}, {#3}}}
+
+%Geometric notation
+\newcommand{\oneforms}[2]{ {\Omega}^{{1}} ({#1},{#2})}
+\newcommand{\alphatilde}{\tilde{\alpha}}
+\newcommand{\sectionsTM}[1][TM]{\Gamma(#1)}
+\newcommand{\TxM}{T_x M}
+\newcommand{\TmM}{T_m M}
+\newcommand{\Hom}{\text{Hom}}
+\newcommand{\manifold}{\mathcal{M}}
+
+%notation functional analysis
+\newcommand{\pairing}[2]{\langle{#1},\, {#2} \rangle }
+\newcommand{\smoothFunctions}[2]{C^{\infty}(#1,#2)}
+\newcommand{\smoothCompactlySupportedFunctions}[2]{C^{\infty}_{c}(#1,#2)}
+\newcommand{\Contpvar}[3][p]{C^{{#1}\text{-var}}({#2},{#3})}
+\newcommand{\HoelderPaths}[1][\alpha]{C^{{#1}-\text{H\"ol}}}
+\newcommand{\semigroupP}{\mathtt{P}}
+\newcommand{\semigroupT}{\mathtt{T}}
+\newcommand{\generatorL}{{\mathsf{L}}}
+\newcommand{\generatorA}{\mathsf{A}}
+
+%notation Probability
+\newcommand{\filtration}{\mathfrak{F}}
+\newcommand{\measurable}{\hat{\in}}
+\newcommand{\Prob}{{\mathbb{P}}}
+\newcommand{\Expectation}{\mathbb{{E}}}
+\newcommand{\Variance}{\mathrm{Var}}
+\newcommand{\CoVariance}{\mathrm{Cov}}
+\newcommand{\sigmaAlgebra}{\mathfrak{F}}
+\newcommand{\measurableSpace}{\big(\Omega,\sigmaAlgebra \big)}
+\newcommand{\probabilitySpace}{\big(\Omega,\sigmaAlgebra, \Prob \big)}
+\newcommand{\filteredMeasurableSpace}{\big(\Omega,\sigmaAlgebra, (\sigmaAlgebra_t)_t \big)}
+\newcommand{\stochasticBase}{\big(\Omega,\sigmaAlgebra, \Prob, (\sigmaAlgebra_t)_t \big)}
+\newcommand{\marketModel}{\Big( \big(\Omega,\sigmaAlgebra, \Prob, (\sigmaAlgebra_t)_t \big), \generatorL \Big)}
+\newcommand{\iid}{\overset{\text{i.i.d.}}{\sim}}
+\newcommand{\gaussian}[2]{\mathcal{N}({#1},{#2})}
+\newcommand{\normalPDF}[3]{p_{\gaussian{#2}{#3}}\left( #1 \right)}
+\newcommand{\WienerMeasure}[1][ ]{\mu_{#1}}
+\newcommand{\WienerProc}{W}
+%Indicator function%
+\def\one{\mbox{1\hspace{-4.25pt}\fontsize{12}{14.4}\selectfont\textrm{1}}}
+
+
+
+
+
+%Finance
+\newcommand{\pricep}{\mathfrak{p}}
+\newcommand{\DeltaHedge}{\mathtt{Delta}}
+\newcommand{\GammaHedge}{\mathtt{Gamma}}
+
+
+%additional notation peculiar to ALGORITHMIC TRADING AND MACHINE LEARNING
+\newcommand{\trainingInputs}{{\boldsymbol{X}}}
+\newcommand{\columnTrainingInputsOrthogonal}{{\boldsymbol{z}}}
+\newcommand{\columnTrainingInputs}{{\boldsymbol{x}}}
+\newcommand{\trainingResponses}{{\boldsymbol{{y}}}}
+\newcommand{\vectorOne}{\boldsymbol{1}}
+\newcommand{\trainingError}{{\boldsymbol{\epsilon}}}
+\newcommand{\thetaRidgeEpsilon}{{\hat{\theta}}^{\mathtt{\tiny{{ridge}}}}_{\epsilon}}
+\newcommand{\correlation}{\mathrm{corr}}
+\newcommand{\indexSet}{\mathcal{I}}
+\newcommand{\thetaLASSO}{\hat{\theta}^{{\scriptscriptstyle \mathtt{LASSO}}}}
+\newcommand{\primalOptimum}{f^{\star}}
+\newcommand{\primalOptimiser}{\theta^{\star}}
+\newcommand{\geometricMultiplier}{\lambda^{\star}}
+\newcommand{\dualMaximiser}{\varphi^{\star}}
+\newcommand{\Algebra}{\mathcal{A}}
+
+
+% Notation for Bertsimas\&Lo
+\newcommand{\price}{S}
+\newcommand{\unimpactedprice}{\tilde{\price}}
+\newcommand{\inventory}{X}
+\newcommand{\executable}{-\Delta\inventory}
+\newcommand{\noise}{\Delta \WienerProc}

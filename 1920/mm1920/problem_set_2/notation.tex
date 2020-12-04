@@ -1,0 +1,273 @@
+\usepackage{mathrsfs}
+\usepackage{amsfonts}
+\usepackage{xfrac}
+%\usepackage{mathbbol}
+%\usepackage{dsfont}
+%\usepackage{bbm}
+
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+
+
+
+
+\newsavebox{\fminipagebox}
+\NewDocumentEnvironment{fminipage}{m O{\fboxsep}}
+{\par\kern#2\noindent\begin{lrbox}{\fminipagebox}
+		\begin{minipage}{#1}\ignorespaces}
+		{\end{minipage}\end{lrbox}%
+	\makebox[#1]{%
+		\kern\dimexpr-\fboxsep-\fboxrule\relax
+		\fbox{\usebox{\fminipagebox}}%
+		\kern\dimexpr-\fboxsep-\fboxrule\relax
+	}\par\kern#2
+}
+
+
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Rd}{\R^{d}}
+\newcommand{\Rn}{\R^{n}}
+\newcommand{\Rm}{\R^{m}}
+\newcommand{\RN}{\R^{N}}
+\newcommand{\Rnn}{\R^{n\times n}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\X}{\mathbb{X}}
+\newcommand{\sigmatwo}{\sigma^{2}}
+\newcommand{\phalf}{\frac{p}{2}}
+\newcommand{\half}{\frac{1}{2}}
+\newcommand{\inverse}{^{-1}}
+\newcommand{\symmetricPart}{\text{sym}}
+\newcommand{\antisymmetricPart}{\text{antisym}}
+\newcommand{\abs}[1]{\left\lvert {#1} \right\rvert}
+
+\newcommand{\id}[1][ ]{\mathtt{id}_{#1}}
+
+\newcommand{\transpose}{^{\mathsf{T}}}
+\newcommand{\squared}{^{2}}
+
+\newcommand{\subscriptij}{_{i,j}}
+
+\newcommand{\st}{\text{ s.t. }}
+\newcommand{\argmin}{\mathrm{argmin}}
+
+\newcommand{\timeHorizon}{T}
+
+
+%notation for derivatives
+\newcommand{\derivative}{^{\prime}}
+\newcommand{\Fprime}{F\derivative}
+\newcommand{\partialij}{\partial^{2}_{i,j}}
+\newcommand{\gradx}{\nabla_{x}}
+\newcommand{\gradz}{\nabla_{z}}
+\newcommand{\Hessianx}{\nabla^{2}_{xx}}
+\newcommand{\Hessianz}{\nabla^{2}_{zz}}
+
+
+
+
+\newcommand{\restrictedto}[1]{\arrowvert_{#1}}
+
+%norms
+\newcommand{\norm}[1][\cdot]{\left\lVert {#1}\right\rVert}
+\newcommand{\supNorm}[1][\cdot]{\lVert #1 \rVert_{\infty}}
+\newcommand{\HoelNorm}[2][\cdot]{\lVert {#1} \rVert_{{#2}\text{-H\"ol}}}
+\newcommand{\pvarNorm}[2][\cdot]{\lVert {#1} \rVert_{{#2}\text{-var}}}
+\newcommand{\pvarNormInterval}[3][\cdot]{\lVert {#1} \rVert_{{#2}\text{-var}, {#3}}}
+
+%Geometric notation
+\newcommand{\oneforms}[2]{ {\Omega}^{{1}} ({#1},{#2})}
+\newcommand{\alphatilde}{\tilde{\alpha}}
+\newcommand{\sectionsTM}[1][TM]{\Gamma(#1)}
+\newcommand{\TxM}{T_x M}
+\newcommand{\TmM}{T_m M}
+\newcommand{\Hom}{\text{Hom}}
+\newcommand{\manifold}{\mathcal{M}}
+
+%notation functional analysis
+\newcommand{\pairing}[2]{\langle{#1},\, {#2} \rangle }
+\newcommand{\smoothFunctions}[2]{C^{\infty}(#1,#2)}
+\newcommand{\smoothCompactlySupportedFunctions}[2]{C^{\infty}_{c}(#1,#2)}
+\newcommand{\Contpvar}[3][p]{C^{{#1}\text{-var}}({#2},{#3})}
+\newcommand{\HoelderPaths}[1][\alpha]{C^{{#1}-\text{H\"ol}}}
+\newcommand{\semigroupP}{\mathtt{P}}
+\newcommand{\semigroupT}{\mathtt{T}}
+\newcommand{\generatorL}{{\mathsf{L}}}
+\newcommand{\generatorA}{\mathsf{A}}
+
+%notation Probability
+\newcommand{\Prob}{{\mathbb{P}}}
+\newcommand{\Expectation}{\mathbb{{E}}}
+\newcommand{\Variance}{\mathrm{Var}}
+\newcommand{\CoVariance}{\mathrm{Cov}}
+\newcommand{\sigmaAlgebra}{\mathfrak{F}}
+\newcommand{\measurableSpace}{\big(\Omega,\sigmaAlgebra \big)}
+\newcommand{\probabilitySpace}{\big(\Omega,\sigmaAlgebra, \Prob \big)}
+\newcommand{\filteredMeasurableSpace}{\big(\Omega,\sigmaAlgebra, (\sigmaAlgebra_t)_t \big)}
+\newcommand{\stochasticBase}{\big(\Omega,\sigmaAlgebra, \Prob, (\sigmaAlgebra_t)_t \big)}
+\newcommand{\marketModel}{\Big( \big(\Omega,\sigmaAlgebra, \Prob, (\sigmaAlgebra_t)_t \big), \generatorL \Big)}
+\newcommand{\iid}{\overset{\text{i.i.d.}}{\sim}}
+\newcommand{\gaussian}[2]{\mathcal{N}({#1},{#2})}
+\newcommand{\normalPDF}[3]{p_{\gaussian{#2}{#3}}\left( #1 \right)}
+\newcommand{\WienerMeasure}[1][ ]{\mu_{#1}}
+%Indicator function%
+\def\one{\mbox{1\hspace{-4.25pt}\fontsize{12}{14.4}\selectfont\textrm{1}}}
+
+
+%notation rough paths
+\newcommand{\roughX}[1][X]{\mathbf{{#1}}}
+\newcommand{\secondOrderX}[1][X]{\mathbb{\MakeUppercase{#1}}}
+\newcommand{\secondOrderXst}[1][X]{\mathbb{\MakeUppercase{#1}}_{s,t}}
+\newcommand{\roughPair}[1][X]{\mathbf{{#1}}=(#1,\mathbb{{#1}})}
+\newcommand{\roughBracket}[1][X]{\left[\roughX[#1]\right]}
+\newcommand{\roughBracketst}[1][X]{\left[\roughX[#1]\right]_{s,t}}
+\newcommand{\roughBracketsu}[1][X]{\left[\roughX[#1]\right]_{s,u}}
+\newcommand{\roughBracketij}[1][X]{\left[\roughX[#1]\right]^{i,j}}
+\newcommand{\roughBracketijst}[1][X]{\left[\roughX[#1]\right]^{i,j}_{s,t}}
+\newcommand{\formintegral}[2][x]{{^{\mathbf{\MakeUppercase{#1}}}}\! \! \!  \int {#2}}
+\newcommand{\roughSpaceC}[3]{{\mathscr{C}}^{\sfrac{1}{#1}}([0,{#2}],{#3})}
+\newcommand{\geomRoughSpace}[2]{{\mathscr{G}}^{\sfrac{1}{#1}}({#2})}
+\newcommand{\weakgeomRoughSpace}[2]{\mathscr{W}\geomRoughSpace{#1}{#2}}
+\newcommand{\geomRoughSpaceInterval}[3]{{\mathscr{G}}^{\sfrac{1}{#1}}({#2},{#3})}
+\newcommand{\weakgeomRoughSpaceInterval}[3]{\mathscr{W}\geomRoughSpaceInterval{#1}{#2}{#3}}
+\newcommand{\xs}{x_{s}}
+\newcommand{\xt}{x_{t}}	
+\newcommand{\xst}{x_{s,t}}
+\newcommand{\ys}{y_{s}}
+\newcommand{\yt}{y_{t}}
+\newcommand{\yst}{y_{s,t}}
+\newcommand{\Xs}{X_{s}}
+\newcommand{\Xt}{X_{t}}	
+\newcommand{\Xst}{X_{s,t}}
+\newcommand{\Xuv}{X_{u,v}}
+\newcommand{\Xsti}{X_{s,t}^{i}}
+\newcommand{\Xstj}{X_{s,t}^{j}}
+\newcommand{\Xsu}{X_{s,u}}
+\newcommand{\Xut}{X_{u,t}}
+\newcommand{\Ys}{Y_{s}}
+\newcommand{\Yt}{Y_{t}}
+\newcommand{\Yst}{Y_{s,t}}
+\newcommand{\Xist}{\Xi_{s,t}}
+\newcommand{\aTensorbeqXst}[1][x]{a\otimes b = \Xst[#1]}
+\newcommand{\roughDistance}[3][p]{\rho_{\sfrac{1}{#1}}\left(\roughX[#2],\roughX[#3]\right)}
+\newcommand{\controlledPaths}[2][X]{\mathcal{D}_{#1}^{#2}}
+
+%notation PP16 Superhedging approach to stochastic integration
+\newcommand{\lambdaAdmissible}[1][\lambda]{\mathcal{H}_{#1}}
+\newcommand{\superhedgingP}{\bar{P}}
+\newcommand{\superhedgingQ}{\bar{Q}}
+\newcommand{\simpleCapitalProcess}[1][t]{\mathfrak{K}_{#1}}
+\newcommand{\positiveCapitalProcess}[1][t]{\mathfrak{G}_{#1}}
+
+%Finance
+\newcommand{\pricep}{\mathfrak{p}}
+\newcommand{\DeltaHedge}{\mathtt{Delta}}
+\newcommand{\GammaHedge}{\mathtt{Gamma}}
+
+
+%additional notation peculiar to ALGORITHMIC TRADING AND MACHINE LEARNING
+\newcommand{\trainingInputs}{{\boldsymbol{X}}}
+\newcommand{\columnTrainingInputsOrthogonal}{{\boldsymbol{z}}}
+\newcommand{\columnTrainingInputs}{{\boldsymbol{x}}}
+\newcommand{\trainingResponses}{{\boldsymbol{{y}}}}
+\newcommand{\vectorOne}{\boldsymbol{1}}
+\newcommand{\trainingError}{{\boldsymbol{\epsilon}}}
+\newcommand{\thetaRidgeEpsilon}{{\hat{\theta}}^{\mathtt{\tiny{{ridge}}}}_{\epsilon}}
+\newcommand{\correlation}{\mathrm{corr}}
+\newcommand{\indexSet}{\mathcal{I}}
+\newcommand{\thetaLASSO}{\hat{\theta}^{{\scriptscriptstyle \mathtt{LASSO}}}}
+\newcommand{\primalOptimum}{f^{\star}}
+\newcommand{\primalOptimiser}{\theta^{\star}}
+\newcommand{\geometricMultiplier}{\lambda^{\star}}
+\newcommand{\dualMaximiser}{\varphi^{\star}}
+\newcommand{\Algebra}{\mathcal{A}}
+
+
+% notation peculiar to "Sectional cost of Trade Execution"
+% Notation for Limit Order Book
+\newcommand{\price}{S}
+\newcommand{\tickSizeOfLOB}{\tau}
+\newcommand{\midPrice}{\price^{m}}
+\newcommand{\volume}{V}
+\newcommand{\bidPriceLevelN}[1][1]{\price^{b,{#1}}}
+\newcommand{\askPriceLevelN}[1][1]{\price^{a,{#1}}}
+\newcommand{\bidVolumeLevelN}[1][1]{\volume^{b,{#1}}}
+\newcommand{\askVolumeLevelN}[1][1]{\volume^{a,{#1}}}
+\newcommand{\bestBidPrice}{\price^{b}}
+\newcommand{\nthBestBidPrice}[1][1]{\price^{b,{#1}}}
+\newcommand{\bestAskPrice}{\price^{a}}
+\newcommand{\nthBestAskPrice}[1][1]{\price^{a,{#1}}}
+\newcommand{\bestBidVolume}{\volume^{b}}
+\newcommand{\nthBestBidVolume}[1][1]{\volume^{b,{#1}}}
+\newcommand{\bestAskVolume}{\volume^{a}}
+\newcommand{\nthBestAskVolume}[1][1]{\volume^{a,{#1}}}
+\newcommand{\orderFlowImbalance}{OFI}
+\newcommand{\volumeImbalance}{I}
+\newcommand{\quantityToLiquidate}{Q}
+\newcommand{\quantityToExecute}{X}
+\newcommand{\costOfImpact}{C^{\text{impact}}}
+\newcommand{\costOfSplitting}{C^{\text{split}}}
+\newcommand{\discountedCostOfImpact}{\tilde{C}}
+\newcommand{\coeffOfAversionToMarketImpact}{\kappa}
+\newcommand{\coeffCostOfDepthConsumption}{c_1}
+\newcommand{\coeffCostOfVolumeImbalance}{c_2}
+\newcommand{\coeffCostOfSplitting}{c_3}
+\newcommand{\sectionalCostOfExecution}{C}
+\newcommand{\sectionalCostOfExecutionFunction}{H}
+\newcommand{\LOBspread}{\phi}
+
+\newcommand{\frequencyOfLiquidatorsOrders}{\mathfrak{f}}
+
+
+\newcommand{\effectivePrice}{P}
+\newcommand{\intensityOfPriceJump}{\lambda_{\text{\tiny price}}}
+\newcommand{\estimatorOfIntensityOfPriceJump}{\hat{\lambda}_{\text{\tiny price}}}
+\newcommand{\sizeOfPriceJump}{B}
+\newcommand{\randomSign}{\epsilon}
+\newcommand{\absoluteSizeOfPriceJump}{X}
+\newcommand{\paretoScale}{x_0}
+\newcommand{\estimatorOfParetoScale}{\hat{x}_0}
+\newcommand{\paretoShape}{\kappa}
+\newcommand{\estimatorOfParetoShape}{\hat{\paretoShape} }
+\newcommand{\noiseTransaction}{U}
+\newcommand{\intensityOfNoiseTransaction}{\lambda_{\text{\tiny noise}}}
+\newcommand{\estimatorOfIntensityOfNoiseTransaction}{\hat{\lambda}_{\text{\tiny noise}}}
+\newcommand{\scaleOfNoiseTransaction}{\zeta}
+\newcommand{\estimatorOfScaleOfNoiseTransaction}{\hat{\scaleOfNoiseTransaction}}
+\newcommand{\degreeOftStudent}{\delta}
+\newcommand{\estimatorOfDegreeOftStudent}{\hat{\degreeOftStudent}}
+\newcommand{\discretisedEffectivePrice}{\price^{\text{E}}}
+\newcommand{\zeroTickHalfSpread}{\mu}
+\newcommand{\intensityRatio}{r}
+\newcommand{\distancePriceAndDiscretisedePrice}{\Delta}
+\newcommand{\firstAskLevelAtEquilibrium}{m^{a}}
+\newcommand{\firstBidLevelAtEquilibrium}{m^{b}}
+\newcommand{\askPriceAtEquilibrium}[1][1]{\bar{\price}^{a,{#1}}}
+\newcommand{\askVolumeAtEquilibrium}[1][1]{\bar{\volume}^{a,{#1}}}
+\newcommand{\bidPriceAtEquilibrium}[1][1]{\bar{\price}^{b,{#1}}}
+\newcommand{\bidVolumeAtEquilibrium}[1][1]{\bar{\volume}^{b,{#1}}}
+\newcommand{\OUdynamicVolumesASK}[1][i]{v^{\text{\tiny ASK}, {#1}}}
+\newcommand{\OUdynamicVolumesBID}[1][i]{v^{\text{\tiny BID},{#1}} }
+\newcommand{\OUconvergenceRate}{\gamma_{\text{\tiny OU}}}
+\newcommand{\estimatorOUconvergenceRate}{\hat{\gamma}_{\text{\tiny OU}}}
+\newcommand{\lag}{\ell}
+\newcommand{\intensityLag}{\lambda_{\text{\tiny lag}}}
+\newcommand{\estimatorOfIntensityLag}{\hat{\lambda}_{\text{\tiny lag}}}
+\newcommand{\volatiltyOfLagPerturbation}{\sigma_{\text{\tiny lag}} }
+\newcommand{\estimatorOfVolatiltyOfLagPerturbation}{\hat{\sigma}_{\text{\tiny lag}} }
+\newcommand{\volatilityOU}{\sigma_{\text{\tiny OU}} }
+\newcommand{\estimatorOfVolatilityOU}{\hat{\sigma}_{\text{\tiny OU}}}
+\newcommand{\jumpDuringLagASK}[1][i]{ N^{a,{#1}} }
+\newcommand{\timeOfJumpDuringLagASK}[1][i]{ u^{a,{#1}} }
+\newcommand{\jumpDuringLagBID}[1][i]{ N^{b,{#1}} }
+\newcommand{\timeOfJumpDuringLagBID}[1][i]{ u^{b,{#1}} }
+\newcommand{\timesOfReducingBidOrders}{\mathcal{S}_{\text{\tiny BID} } }
+\newcommand{\timesOfReducingAskOrders}{\mathcal{S}_{\text{\tiny ASK} } }
+\newcommand{\deltaTask}{\Delta t_{\text{\tiny ASK} } }
+\newcommand{\meanEstimatorForOUconvergenceRateASK}[2]{m^{{#1}}_{#2} (\OUdynamicVolumesASK) }
+\newcommand{\estimatorVolatilityPerTrade}{\hat{\sigma}}
+\newcommand{\tuningParam}{\theta}

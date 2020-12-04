@@ -1,0 +1,374 @@
+\documentclass[11pt]{article}
+
+   \include{header}
+   
+    
+    
+
+\begin{document}
+    
+	
+	\begin{center}
+		\begin{figure}
+			\includegraphics[width=0.2\textwidth]{imperial_logo_light}
+		\end{figure}
+	\begin{Large}
+		Market Microstructure \\
+		\textsc{Problem Set 1 - Exercise 3}
+	\end{Large}
+	\end{center}
+
+\vspace{0.2cm}
+
+\noindent Tuesday 28 January 2020 \\
+\noindent Johannes Muhle-Karbe, \small{\texttt{j.muhle-karbe@imperial.ac.uk}} \\
+\noindent Claudio Bellani, \small{\texttt{ c.bellani17@imperial.ac.uk}}
+
+\vspace{0.5cm}
+    
+    
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{os} 
+\PY{k+kn}{import} \PY{n+nn}{sys}
+\PY{k+kn}{import} \PY{n+nn}{pickle}
+\PY{k+kn}{from} \PY{n+nn}{pathlib} \PY{k+kn}{import} \PY{n}{Path}
+\PY{n}{path\PYZus{}problemset} \PY{o}{=} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{abspath}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{./}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{path\PYZus{}lobster} \PY{o}{=} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{abspath}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{../lobster/}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{os}\PY{o}{.}\PY{n}{chdir}\PY{p}{(}\PY{n}{path\PYZus{}lobster}\PY{p}{)}
+\PY{n}{path\PYZus{}data} \PY{o}{=} \PY{n}{path\PYZus{}lobster}\PY{o}{+}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/data}\PY{l+s+s1}{\PYZsq{}}
+\PY{n}{sys}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{path\PYZus{}lobster}\PY{o}{+}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/src}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{produce\PYZus{}data} \PY{k+kn}{import} \PY{n}{produce}
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Specify symbol, date, initial, time and final time:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{symbol}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{MSFT}\PY{l+s+s1}{\PYZsq{}}
+\PY{n}{date}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{2012\PYZhy{}06\PYZhy{}21}\PY{l+s+s1}{\PYZsq{}}
+\PY{n}{initial\PYZus{}time}\PY{o}{=}\PY{n+nb}{float}\PY{p}{(}\PY{l+m+mi}{9}\PY{o}{*}\PY{l+m+mi}{60}\PY{o}{*}\PY{l+m+mi}{60}\PY{p}{)}
+\PY{n}{final\PYZus{}time}\PY{o}{=}\PY{n+nb}{float}\PY{p}{(}\PY{l+m+mi}{16}\PY{o}{*}\PY{l+m+mi}{60}\PY{o}{*}\PY{l+m+mi}{60}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Load or produce data from source:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{produce\PYZus{}data}\PY{o}{=}\PY{k+kc}{False}
+\PY{n}{load\PYZus{}data}\PY{o}{=}\PY{k+kc}{True}
+\PY{k}{if} \PY{n}{produce\PYZus{}data}\PY{p}{:}
+    \PY{n}{data}\PY{o}{=}\PY{n}{produce}\PY{p}{(}
+        \PY{n}{symbol}\PY{p}{,}\PY{n}{date}\PY{p}{,}\PY{n}{initial\PYZus{}time}\PY{p}{,}\PY{n}{final\PYZus{}time}
+    \PY{p}{)}
+\PY{k}{else}\PY{p}{:}
+    \PY{k}{if} \PY{n}{load\PYZus{}data}\PY{p}{:}
+        \PY{n}{time\PYZus{}window} \PY{o}{=} \PY{n+nb}{str}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n+nb}{int}\PY{p}{(}\PY{n}{initial\PYZus{}time}\PY{p}{)}\PY{p}{,} \PY{n+nb}{int}\PY{p}{(}\PY{n}{final\PYZus{}time}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+        \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{n}{path\PYZus{}problemset}\PY{o}{+}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZus{}}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZus{}}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZus{}data}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{symbol}\PY{p}{,} \PY{n}{date}\PY{p}{,} \PY{n}{time\PYZus{}window}\PY{p}{)}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{rb}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{source}\PY{p}{:}
+            \PY{n}{data}\PY{o}{=}\PY{n}{pickle}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{n}{source}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{exercise-1.3.1}{%
+\subsection*{Exercise 1.3.1}\label{exercise-1.3.1}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{mf} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{messagefile}
+\PY{n}{idx} \PY{o}{=} \PY{p}{(}\PY{n}{mf}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{event\PYZus{}type}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{isin}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\PY{n}{idx} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{logical\PYZus{}and}\PY{p}{(}\PY{n}{idx}\PY{p}{,}\PY{n}{np}\PY{o}{.}\PY{n}{logical\PYZus{}and}\PY{p}{(}\PY{p}{(}\PY{n}{mf}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{\PYZlt{}}\PY{l+m+mf}{14.5}\PY{o}{*}\PY{l+m+mi}{60}\PY{o}{*}\PY{l+m+mi}{60}\PY{p}{)}\PY{p}{,}\PY{p}{(}\PY{n}{mf}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{\PYZgt{}}\PY{l+m+mi}{10}\PY{o}{*}\PY{l+m+mi}{60}\PY{o}{*}\PY{l+m+mi}{60}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n}{trades} \PY{o}{=} \PY{n}{mf}\PY{p}{[}\PY{n}{idx}\PY{p}{]}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+\PY{n}{trades} \PY{o}{=} \PY{n}{trades}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{reset\PYZus{}index}\PY{p}{(}\PY{n}{drop}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{lob\PYZus{}trades} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{LOB}\PY{p}{[}\PY{n}{idx}\PY{p}{]}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+\PY{n}{lob\PYZus{}trades} \PY{o}{=} \PY{n}{lob\PYZus{}trades}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{reset\PYZus{}index}\PY{p}{(}\PY{n}{drop}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Let's take a look at the two pandas dataframe just created.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{trades}
+\end{Verbatim}
+\end{tcolorbox}
+
+\begin{scriptsize}
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+      direction  event\_type  level  original\_idx   price  size          time  \textbackslash{}
+0             1           4      0         62222  308800  5345  36000.419575
+1             1           4      1         62304  308700  2000  36000.446011
+2             1           4      0         62312  308700   807  36000.446849
+3             1           4      1         62353  308600   700  36000.465200
+4             1           4      0         62362  308600  1744  36000.465487
+{\ldots}         {\ldots}         {\ldots}    {\ldots}           {\ldots}     {\ldots}   {\ldots}           {\ldots}
+4241          1           4      1        482011  303300   100  52189.187548
+4242          1           4      1        482014  303300   100  52189.387056
+4243          1           4      1        482025  303300  2739  52189.387887
+4244          1           4      0        482026  303300   100  52189.387896
+4245         -1           4      1        482030  303400   100  52189.387940
+
+[4246 rows x 9 columns]
+\end{Verbatim}
+\end{tcolorbox}
+\end{scriptsize}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{lob\PYZus{}trades}
+\end{Verbatim}
+\end{tcolorbox}
+
+\begin{scriptsize}
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+      ask\_price\_1  ask\_volume\_1  bid\_price\_1  bid\_volume\_1  ask\_price\_2  \textbackslash{}
+0          308900          1855       308800          5345       309000
+1          308900          1855       308700          3125       309000
+2          308800         10850       308700           807       308900
+3          308800         10850       308600          2650       308900
+4          308800         14850       308600          1744       308900
+{\ldots}           {\ldots}           {\ldots}          {\ldots}           {\ldots}          {\ldots}
+4241       303400          8358       303300          3639       303500
+4242       303400         10965       303300          3139       303500
+4243       303400         10965       303300          3039       303500
+4244       303400         10965       303300           100       303500
+4245       303400         10965       303200         13355       303500
+
+      ask\_volume\_2  bid\_price\_2  bid\_volume\_2  ask\_price\_3  ask\_volume\_3  {\ldots}  \textbackslash{}
+0             5380       308700          3125       309100          5560  {\ldots}
+1             5380       308600          2650       309100          5560  {\ldots}
+2            15120       308600          2650       309000          7380  {\ldots}
+3            15066       308500         13750       309000          7380  {\ldots}
+4            13866       308500         10158       309000          7993  {\ldots}
+{\ldots}            {\ldots}          {\ldots}           {\ldots}          {\ldots}           {\ldots}  {\ldots}
+4241         19547       303200         15219       303600         19746  {\ldots}
+4242         19447       303200         13355       303600         21046  {\ldots}
+4243         19447       303200         13355       303600         21046  {\ldots}
+4244         19447       303200         13355       303600         21046  {\ldots}
+4245         19447       303100         19690       303600         21046  {\ldots}
+
+      ask\_price\_9  ask\_volume\_9  bid\_price\_9  bid\_volume\_9  ask\_price\_10  \textbackslash{}
+0          309700          4670       308000          4602        309800
+1          309700          4670       307900           100        309800
+2          309600          3013       307900          1500        309700
+3          309600          3013       307800          6416        309700
+4          309600          3013       307800          6416        309700
+{\ldots}           {\ldots}           {\ldots}          {\ldots}           {\ldots}           {\ldots}
+4241       304200          7340       302500         16614        304300
+4242       304200          7340       302500         16614        304300
+4243       304200          7340       302500         16614        304300
+4244       304200          7340       302500         16614        304300
+4245       304200          7340       302400         14300        304300
+
+      ask\_volume\_10  bid\_price\_10  bid\_volume\_10  original\_idx          time
+0              1600        307900            100         62201  36000.418617
+1              1600        307800           6616         62222  36000.419575
+2              4670        307800           6416         62304  36000.446011
+3              4670        307700            460         62312  36000.446849
+4              4470        307700            460         62353  36000.465200
+{\ldots}             {\ldots}           {\ldots}            {\ldots}           {\ldots}           {\ldots}
+4241           7700        302400          14300        481978  52188.120529
+4242           7700        302400          14300        482011  52189.187548
+4243           7700        302400          14300        482014  52189.387056
+4244           7700        302400          14300        482025  52189.387887
+4245           7700        302300          13600        482026  52189.387896
+
+[4246 rows x 42 columns]
+\end{Verbatim}
+\end{tcolorbox}
+\end{scriptsize}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{empirical\PYZus{}spread}\PY{p}{(}\PY{n}{lob\PYZus{}trades}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{(}\PY{n}{lob\PYZus{}trades}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ask\PYZus{}price\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{lob\PYZus{}trades}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bid\PYZus{}price\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{class} \PY{n+nc}{Roll}\PY{p}{:}
+    \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,}\PY{n}{trades}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{trades} \PY{o}{=} \PY{n}{trades}\PY{p}{;}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{directions} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{*}\PY{n}{trades}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{direction}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{int}\PY{p}{)} \PY{c+c1}{\PYZsh{}Notice the change of sign}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{prices} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{trades}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{int}\PY{p}{)}
+    \PY{k}{def} \PY{n+nf}{covariance\PYZus{}of\PYZus{}price\PYZus{}increments}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,}\PY{p}{)}\PY{p}{:}
+        \PY{n}{delta\PYZus{}p} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{diff}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{prices}\PY{p}{)}
+        \PY{n}{dp\PYZus{}for} \PY{o}{=} \PY{n}{delta\PYZus{}p}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}
+        \PY{n}{m\PYZus{}for} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{dp\PYZus{}for}\PY{p}{)}
+        \PY{n}{dp\PYZus{}back} \PY{o}{=} \PY{n}{delta\PYZus{}p}\PY{p}{[}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+        \PY{n}{m\PYZus{}back} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{dp\PYZus{}back}\PY{p}{)}
+        \PY{n}{N} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{dp\PYZus{}for}\PY{p}{)}
+        \PY{k}{assert} \PY{n}{N} \PY{o}{==} \PY{n+nb}{len}\PY{p}{(}\PY{n}{dp\PYZus{}back}\PY{p}{)}
+        \PY{n}{cov\PYZus{}deltap} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{dp\PYZus{}for} \PY{o}{\PYZhy{}} \PY{n}{m\PYZus{}for}\PY{p}{,} \PY{n}{dp\PYZus{}back} \PY{o}{\PYZhy{}} \PY{n}{m\PYZus{}back}\PY{p}{)}\PY{o}{/}\PY{n}{N}
+        \PY{k}{assert} \PY{n}{cov\PYZus{}deltap} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{l+m+mf}{0.0}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{cov\PYZus{}deltap} \PY{o}{=} \PY{n}{cov\PYZus{}deltap}
+    \PY{k}{def} \PY{n+nf}{spread\PYZus{}assuming\PYZus{}balanced\PYZus{}orderflow}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{l+m+mi}{2}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{cov\PYZus{}deltap}\PY{p}{)}
+    \PY{k}{def} \PY{n+nf}{spread}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,}\PY{p}{)}\PY{p}{:}
+        \PY{n}{theta} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{directions}\PY{o}{==}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{/}\PY{n+nb}{len}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{directions}\PY{p}{)}
+        \PY{k}{assert} \PY{n}{theta}\PY{o}{\PYZgt{}}\PY{l+m+mf}{0.0}
+        \PY{k}{assert} \PY{n}{theta}\PY{o}{\PYZlt{}}\PY{l+m+mf}{1.0}
+        \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{cov\PYZus{}deltap}\PY{o}{/}\PY{p}{(}\PY{n}{theta}\PY{o}{*}\PY{p}{(}\PY{l+m+mf}{1.0}\PY{o}{\PYZhy{}}\PY{n}{theta}\PY{p}{)}\PY{p}{)}\PY{p}{)}        
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{roll} \PY{o}{=} \PY{n}{Roll}\PY{p}{(}\PY{n}{trades}\PY{p}{)}
+\PY{n}{roll}\PY{o}{.}\PY{n}{covariance\PYZus{}of\PYZus{}price\PYZus{}increments}\PY{p}{(}\PY{p}{)}
+\PY{n}{S\PYZus{}balance\PYZus{}of} \PY{o}{=} \PY{n}{roll}\PY{o}{.}\PY{n}{spread\PYZus{}assuming\PYZus{}balanced\PYZus{}orderflow}\PY{p}{(}\PY{p}{)}
+\PY{n}{S\PYZus{}unbalance\PYZus{}of} \PY{o}{=} \PY{n}{roll}\PY{o}{.}\PY{n}{spread}\PY{p}{(}\PY{p}{)}
+\PY{n}{avg\PYZus{}spread} \PY{o}{=} \PY{n}{empirical\PYZus{}spread}\PY{p}{(}\PY{n}{lob\PYZus{}trades}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{S\PYZus{}balance\PYZus{}of}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{S\PYZus{}unbalance\PYZus{}of}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{avg\PYZus{}spread}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+42.94604071467853
+43.03056413872584
+129.51012717852097
+    \end{Verbatim}
+
+    \hypertarget{exercises-1.3.3}{%
+\subsection*{Exercises 1.3.3}\label{exercises-1.3.3}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{select\PYZus{}timewindow}\PY{p}{(}\PY{n}{mf}\PY{p}{,}\PY{n}{t0}\PY{p}{,}\PY{n}{t1}\PY{p}{)}\PY{p}{:}
+    \PY{n}{idx} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{logical\PYZus{}and}\PY{p}{(}\PY{p}{(}\PY{n}{mf}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{\PYZlt{}}\PY{n}{t1}\PY{p}{)}\PY{p}{,}\PY{p}{(}\PY{n}{mf}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{\PYZgt{}}\PY{n}{t0}\PY{p}{)}\PY{p}{)}
+    \PY{k}{return} \PY{n}{mf}\PY{p}{[}\PY{n}{idx}\PY{p}{]}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{reset\PYZus{}index}\PY{p}{(}\PY{n}{drop}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{categorise\PYZus{}in\PYZus{}time\PYZus{}slots}\PY{p}{(}\PY{n}{timestamps}\PY{p}{,} \PY{n}{delta\PYZus{}t}\PY{p}{)}\PY{p}{:}
+    \PY{k}{assert} \PY{n}{delta\PYZus{}t} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}
+    \PY{k}{assert} \PY{n}{np}\PY{o}{.}\PY{n}{all}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{diff}\PY{p}{(}\PY{n}{timestamps}\PY{p}{)}\PY{o}{\PYZgt{}}\PY{o}{=}\PY{l+m+mf}{0.0}\PY{p}{)}
+    \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{(}\PY{n}{timestamps}\PY{o}{\PYZhy{}}\PY{n}{timestamps}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{/}\PY{n}{delta\PYZus{}t}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{int}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{class} \PY{n+nc}{Amihud}\PY{p}{:}
+    \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,}\PY{n}{trades}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{trades} \PY{o}{=} \PY{n}{trades}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{trades}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{monetary\PYZus{}vol}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{trades}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{*}\PY{n}{trades}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{size}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+    \PY{k}{def} \PY{n+nf}{illiquidity\PYZus{}ratio}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,}\PY{n}{delta\PYZus{}t} \PY{o}{=} \PY{l+m+mi}{60}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{trades}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{time\PYZus{}slot}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{categorise\PYZus{}in\PYZus{}time\PYZus{}slots}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{trades}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{,} \PY{n}{delta\PYZus{}t}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{volumes} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{trades}\PY{o}{.}\PY{n}{groupby}\PY{p}{(}\PY{n}{by}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{time\PYZus{}slot}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{monetary\PYZus{}vol}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+        \PY{n}{times} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{trades}\PY{o}{.}\PY{n}{groupby}\PY{p}{(}\PY{n}{by}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{time\PYZus{}slot}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{times} \PY{o}{=} \PY{n}{times}
+        \PY{n}{idx} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{trades}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{original\PYZus{}idx}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{isin}\PY{p}{(}
+            \PY{n+nb}{list}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{trades}\PY{o}{.}\PY{n}{groupby}\PY{p}{(}\PY{n}{by}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{time\PYZus{}slot}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{original\PYZus{}idx}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{values}\PY{p}{)}
+        \PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{prices} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{trades}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{idx}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{returns} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{diff}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{prices}\PY{p}{)}\PY{o}{/}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{prices}\PY{p}{[}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+        \PY{k}{assert} \PY{n+nb}{len}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{returns}\PY{p}{)} \PY{o}{==} \PY{n+nb}{len}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{volumes}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}
+        \PY{k}{return}  \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{returns}\PY{o}{.}\PY{n}{values}\PY{p}{)}\PY{o}{/}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{volumes}\PY{o}{.}\PY{n}{values}\PY{p}{[}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{mf} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{messagefile}
+\PY{n}{idx} \PY{o}{=} \PY{p}{(}\PY{n}{mf}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{event\PYZus{}type}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{isin}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\PY{n}{mf} \PY{o}{=} \PY{n}{mf}\PY{p}{[}\PY{n}{idx}\PY{p}{]}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Time window 9am\PYZhy{}10am}
+\PY{n}{t0}\PY{o}{=}\PY{l+m+mi}{9}\PY{o}{*}\PY{l+m+mi}{60}\PY{o}{*}\PY{l+m+mi}{60}
+\PY{n}{t1}\PY{o}{=}\PY{l+m+mi}{10}\PY{o}{*}\PY{l+m+mi}{60}\PY{o}{*}\PY{l+m+mi}{60}
+\PY{n}{trades} \PY{o}{=} \PY{n}{select\PYZus{}timewindow}\PY{p}{(}\PY{n}{mf}\PY{p}{,}\PY{n}{t0}\PY{p}{,}\PY{n}{t1}\PY{p}{)}
+\PY{n}{amihud\PYZus{}09001000} \PY{o}{=} \PY{n}{Amihud}\PY{p}{(}\PY{n}{trades}\PY{p}{)}
+\PY{n}{ratio\PYZus{}09001000} \PY{o}{=} \PY{n}{amihud\PYZus{}09001000}\PY{o}{.}\PY{n}{illiquidity\PYZus{}ratio}\PY{p}{(}\PY{n}{delta\PYZus{}t} \PY{o}{=} \PY{l+m+mi}{60}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ratio\PYZus{}09001000}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+1.0296871776495485e-13
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Time window 11.30am\PYZhy{}1.30am}
+\PY{n}{t0}\PY{o}{=}\PY{l+m+mf}{11.5}\PY{o}{*}\PY{l+m+mi}{60}\PY{o}{*}\PY{l+m+mi}{60}
+\PY{n}{t1}\PY{o}{=}\PY{l+m+mf}{13.5}\PY{o}{*}\PY{l+m+mi}{60}\PY{o}{*}\PY{l+m+mi}{60}
+\PY{n}{trades} \PY{o}{=} \PY{n}{select\PYZus{}timewindow}\PY{p}{(}\PY{n}{mf}\PY{p}{,}\PY{n}{t0}\PY{p}{,}\PY{n}{t1}\PY{p}{)}
+\PY{n}{amihud\PYZus{}11301330} \PY{o}{=} \PY{n}{Amihud}\PY{p}{(}\PY{n}{trades}\PY{p}{)}
+\PY{n}{ratio\PYZus{}11301330} \PY{o}{=} \PY{n}{amihud\PYZus{}11301330}\PY{o}{.}\PY{n}{illiquidity\PYZus{}ratio}\PY{p}{(}\PY{n}{delta\PYZus{}t} \PY{o}{=} \PY{l+m+mi}{60}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ratio\PYZus{}11301330}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+1.065959216549388e-13
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Time window 3pm\PYZhy{}4pm}
+\PY{n}{t0}\PY{o}{=}\PY{l+m+mi}{15}\PY{o}{*}\PY{l+m+mi}{60}\PY{o}{*}\PY{l+m+mi}{60}
+\PY{n}{t1}\PY{o}{=}\PY{l+m+mi}{16}\PY{o}{*}\PY{l+m+mi}{60}\PY{o}{*}\PY{l+m+mi}{60}
+\PY{n}{trades} \PY{o}{=} \PY{n}{select\PYZus{}timewindow}\PY{p}{(}\PY{n}{mf}\PY{p}{,}\PY{n}{t0}\PY{p}{,}\PY{n}{t1}\PY{p}{)}
+\PY{n}{amihud\PYZus{}15001600} \PY{o}{=} \PY{n}{Amihud}\PY{p}{(}\PY{n}{trades}\PY{p}{)}
+\PY{n}{ratio\PYZus{}15001600} \PY{o}{=} \PY{n}{amihud\PYZus{}15001600}\PY{o}{.}\PY{n}{illiquidity\PYZus{}ratio}\PY{p}{(}\PY{n}{delta\PYZus{}t} \PY{o}{=} \PY{l+m+mi}{60}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ratio\PYZus{}15001600}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+9.870802066339614e-14
+    \end{Verbatim}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
