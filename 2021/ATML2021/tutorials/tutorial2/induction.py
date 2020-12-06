@@ -3,7 +3,7 @@ def Cstar_t(s, x):
     return c_1t*(x**2) + c_2t*(s**2) + c_3t*(s*x) \
             + c_4t*x + c_5t*s + c_6t
 def G_t(s, x, v):
-    return  v*(s + theta*v) \
+    return  v*(s + alpha*v) \
             + c_1t1*(x-v)**2 \
             + c_2t1*expected_squared_price(s, x, v) \
             + c_3t1*(x-v)*expected_price(s, x, v) \
